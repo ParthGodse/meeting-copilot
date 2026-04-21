@@ -11,6 +11,7 @@ export function useSuggestions() {
 
   const {
     apiKey,
+    isRecording,
     isRefreshing,
     setIsRefreshing,
     addSuggestionBatch,
@@ -20,6 +21,7 @@ export function useSuggestions() {
 
   const refresh = useCallback(async () => {
     if (isRefreshing || !apiKey) return;
+    if (!useSession.getState().isRecording) return;
     setIsRefreshing(true);
 
     try {
@@ -39,7 +41,7 @@ export function useSuggestions() {
     } finally {
       setIsRefreshing(false);
     }
-  }, [apiKey, isRefreshing, setIsRefreshing, addSuggestionBatch, getRecentTranscript, getPreviousPreviews]);
+  }, [apiKey, isRecording, isRefreshing, setIsRefreshing, addSuggestionBatch, getRecentTranscript, getPreviousPreviews]);
 
   const resetCountdown = useCallback(
     (onTick?: (v: number) => void) => {

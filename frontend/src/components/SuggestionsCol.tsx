@@ -10,15 +10,16 @@ function formatStamp(d: Date) {
 }
 
 export function SuggestionsCol() {
-  const { suggestionBatches, isRefreshing } = useSession();
+  const { suggestionBatches, isRefreshing, isRecording } = useSession();
   const { manualRefresh, resetCountdown } = useSuggestions();
   const { sendMessage } = useChat();
   const [countdown, setCountdown] = useState(30);
 
-  // Start countdown on mount
   useEffect(() => {
+  if (isRecording) {
     resetCountdown(setCountdown);
-  }, []);
+  }
+}, [isRecording]);
 
   function handleRefresh() {
     manualRefresh(setCountdown);

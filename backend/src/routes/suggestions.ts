@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     const { recentTranscript, previousPreviews = [] } = req.body;
 
     // Cap context sent to LLM — free tier token budget
-    const safeTranscript = truncateToWords(recentTranscript || '', 400);
+    const safeTranscript = truncateToWords(recentTranscript || '', 250);
 
     const userMsg = `Recent transcript (last ~400 words — focus on the final 60-90 seconds):
 """
@@ -27,7 +27,7 @@ Generate 3 fresh, maximally useful suggestions now.`;
         { role: 'system', content: SUGGESTIONS_SYSTEM },
         { role: 'user', content: userMsg },
       ],
-      900,
+      600,
       apiKey
     );
 

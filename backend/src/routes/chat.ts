@@ -12,7 +12,7 @@ router.post('/stream', async (req, res) => {
     if (!Array.isArray(messages)) throw new AppError('messages must be an array', 400);
 
     // Cap transcript to stay within free tier token budget
-    const safeTranscript = truncateToWords(fullTranscript || '', 2000);
+    const safeTranscript = truncateToWords(fullTranscript || '', 800);
 
     const systemPrompt = suggestionDetail
       ? CLICK_EXPAND_SYSTEM(safeTranscript, suggestionDetail)
@@ -31,7 +31,7 @@ router.post('/stream', async (req, res) => {
 
     const stream = await chatStream(
       [{ role: 'system', content: systemPrompt }, ...recentMessages],
-      1200,
+      800,
       apiKey
     );
 
