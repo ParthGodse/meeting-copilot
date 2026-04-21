@@ -59,7 +59,7 @@ export default function App() {
       {!apiKey && (
         <div
           className="flex items-center justify-between px-5 py-2 text-xs border-b"
-          style={{ background: 'rgba(99,102,241,0.08)', borderColor: 'rgba(99,102,241,0.2)', color: 'var(--color-accent-light)' }}
+          style={{ background: 'rgba(110,168,254,0.08)', borderColor: 'rgba(110,168,254,0.2)', color: '#6ea8fe' }}
         >
           <span>⚠ No Groq API key set — open Settings to get started.</span>
           <button
@@ -74,16 +74,25 @@ export default function App() {
 
       {/* 3-column layout */}
       <div
-        className="flex-1 overflow-hidden grid"
-        style={{ gridTemplateColumns: '1fr 1fr 1fr' }}
+        className="flex-1 overflow-hidden p-3 gap-3"
+        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', background: 'var(--color-bg-primary)' }}
       >
-        <div className="border-r overflow-hidden" style={{ borderColor: 'var(--color-border)' }}>
+        <div
+          className="overflow-hidden rounded-xl border"
+          style={{ borderColor: 'var(--color-border)', background: 'var(--color-bg-secondary)' }}
+        >
           <TranscriptCol />
         </div>
-        <div className="border-r overflow-hidden" style={{ borderColor: 'var(--color-border)' }}>
+        <div
+          className="overflow-hidden rounded-xl border"
+          style={{ borderColor: 'var(--color-border)', background: 'var(--color-bg-secondary)' }}
+        >
           <SuggestionsCol />
         </div>
-        <div className="overflow-hidden">
+        <div
+          className="overflow-hidden rounded-xl border"
+          style={{ borderColor: 'var(--color-border)', background: 'var(--color-bg-secondary)' }}
+        >
           <ChatCol />
         </div>
       </div>

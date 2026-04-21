@@ -27,7 +27,12 @@ export function useSuggestions() {
     try {
       const recentTranscript = getRecentTranscript(400);
       const previousPreviews = getPreviousPreviews();
+
+      console.log('Sending transcript:', recentTranscript); // debug
+      console.log('Previous previews:', previousPreviews);  // debug
+      
       const data = await fetchSuggestions(recentTranscript, previousPreviews, apiKey);
+      console.log('Suggestions received:', data); // debug
 
       if (Array.isArray(data?.suggestions) && data.suggestions.length > 0) {
         addSuggestionBatch({

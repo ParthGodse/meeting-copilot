@@ -79,18 +79,27 @@ export function TranscriptCol() {
         style={{ background: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
       >
         <button
-          onClick={toggleMic}
-          className={`w-11 h-11 rounded-full flex items-center justify-center text-lg flex-0 border-2 transition-all cursor-pointer ${
-            isRecording ? 'recording-pulse' : ''
-          }`}
-          style={{
-            background: isRecording ? '#ef4444' : 'var(--color-bg-tertiary)',
-            borderColor: isRecording ? '#f87171' : 'var(--color-border)',
-            color: isRecording ? 'white' : 'var(--color-text-secondary)',
-          }}
-        >
-          {isRecording ? '⏹' : '🎙'}
-        </button>
+        onClick={toggleMic}
+        style={{
+          width: '56px',
+          height: '56px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '22px',
+          flexShrink: 0,
+          border: '2px solid',
+          cursor: 'pointer',
+          transition: 'all 0.2s',
+          background: isRecording ? '#ef4444' : 'var(--color-bg-tertiary)',
+          borderColor: isRecording ? '#f87171' : 'var(--color-border)',
+          color: isRecording ? 'white' : 'var(--color-text-secondary)',
+        }}
+        className={isRecording ? 'recording-pulse' : ''}
+      >
+        {isRecording ? '⏹' : '🎙'}
+      </button>
 
         <div className="flex flex-col">
           <span className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>
@@ -115,7 +124,12 @@ export function TranscriptCol() {
           {error}
         </div>
       )}
-
+        <div
+          className="mx-4 mt-3 rounded-xl px-3 py-2.5 text-xs leading-relaxed border"
+          style={{ background: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+        >
+          The transcript scrolls and appends new chunks every ~30 seconds while recording. Use the mic button to start/stop. Include an export button (not shown) so we can pull the full session.
+        </div>
       {/* Transcript chunks */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4">
         {transcriptChunks.length === 0 ? (
@@ -127,14 +141,10 @@ export function TranscriptCol() {
             {transcriptChunks.map((chunk, i) => (
               <div
                 key={chunk.id}
-                className="rounded-lg px-3 py-2.5 text-sm leading-relaxed border transition-all"
+                className="rounded-xl px-3 py-2.5 text-sm leading-relaxed border transition-all"
                 style={{
-                  background: i === transcriptChunks.length - 1
-                    ? 'rgba(99,102,241,0.08)'
-                    : 'var(--color-bg-tertiary)',
-                  borderColor: i === transcriptChunks.length - 1
-                    ? 'var(--color-accent)'
-                    : 'var(--color-border)',
+                  borderColor: i === transcriptChunks.length - 1 ? '#6ea8fe' : 'var(--color-border)',
+                  background: i === transcriptChunks.length - 1 ? 'rgba(110,168,254,0.08)' : 'var(--color-bg-tertiary)',
                   color: 'var(--color-text-primary)',
                 }}
               >

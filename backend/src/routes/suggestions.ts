@@ -9,10 +9,11 @@ router.post('/', async (req, res) => {
     const apiKey = validateKey(req.headers['x-groq-key'] as string);
     const { recentTranscript, previousPreviews = [] } = req.body;
 
-    // Cap context sent to LLM — free tier token budget
     const safeTranscript = truncateToWords(recentTranscript || '', 250);
 
-    const userMsg = `Recent transcript (last ~400 words — focus on the final 60-90 seconds):
+    console.log('Transcript received:', safeTranscript); // debug
+
+    const userMsg = `Recent transcript (last ~250 words — focus on the final 60-90 seconds):
 """
 ${safeTranscript || '(No transcript yet — meeting has not started)'}
 """
@@ -20,7 +21,7 @@ ${safeTranscript || '(No transcript yet — meeting has not started)'}
 Previously shown suggestion previews to avoid repeating:
 ${previousPreviews.map((p: string, i: number) => `${i + 1}. ${p}`).join('\n') || 'None'}
 
-Generate 3 fresh, maximally useful suggestions now.`;
+YOU MUST return EXACTLY 3 suggestions as JSON. No markdown. No explanation. Just raw JSON.`;
 
     const completion = await chatComplete(
       [
@@ -31,12 +32,29 @@ Generate 3 fresh, maximally useful suggestions now.`;
       apiKey
     );
 
-    const text = completion.choices[0].message.content || '';
-    const parsed = JSON.parse(text);
-    res.json(parsed);
+    const raw = completion.choices[0].message.content || '';
+    console.log('Raw LLM response:', raw); // debug
+
+    // Strip markdown fences if present
+    const cleaned = raw.replace(/```json\n?|\n?```/g, '').trim();
+
+    // Extract JSON object
+    const match = cleaned.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON found in response: ' + raw);
+
+    const parsed = JSON.parse(match[0]);
+
+    if (!Array.isArray(parsed?.suggestions)) {
+      throw new Error('Invalid suggestions format: ' + raw);
+    }
+
+    // Ensure exactly 3
+    const suggestions = parsed.suggestions.slice(0, 3);
+    res.json({ suggestions });
+
   } catch (err: any) {
-    const status = err?.status || 500;
-    res.status(status).json({ error: err.message });
+    console.error('Suggestions error:', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 

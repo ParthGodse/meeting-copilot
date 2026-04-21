@@ -4,9 +4,7 @@ export type SuggestionType =
   | 'question'
   | 'talking_point'
   | 'answer'
-  | 'fact_check'
-  | 'clarification'
-  | 'action_item';
+  | 'fact_check';
 
 export interface Suggestion {
   type: SuggestionType;

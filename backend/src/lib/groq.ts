@@ -95,7 +95,6 @@ export async function chatComplete(
         messages,
         max_tokens: maxTokens,
         temperature,
-        response_format: { type: 'json_object' },
       })
     ),
     TIMEOUT_MS
